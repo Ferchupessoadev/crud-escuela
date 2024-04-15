@@ -1,0 +1,135 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: system-ui;
+}
+
+:root {
+	color-scheme:dark;
+}
+
+/* header o encabezado */
+
+.header {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 5px 0px;
+	border-bottom: 1px solid #fff;
+}
+
+.header__h1 {
+	font-size:20px;
+	position: absolute;
+	left: 10px;
+}
+
+/* form for add students */
+
+.form-add-student {
+	width: 100%;
+	height: 60px;
+	display: flex;
+	justify-content: end;
+	align-items: center;
+	gap: 10px;
+	position: relative;
+	padding-right: 20px;
+}
+
+.add-student__input {
+	width: 230px;
+	padding: 10px;
+	outline:none;
+	border: 1px solid transparent;
+	border-radius:10px;
+	transition:box-shadow .5s ease-in-out;
+}
+
+.add-student__input-name:focus, 
+.add-student__input-surname:focus {
+	box-shadow: 0px 0px 8px 2px rgba(5,42,224,0.75);
+	-webkit-box-shadow: 0px 0px 8px 2px rgba(5,42,224,0.75);
+	-moz-box-shadow: 0px 0px 8px 2px rgba(5,42,224,0.75);
+}
+
+.add-student__input-submit {
+	width: max-content;
+	height: auto;
+	padding: 10px;
+	background:rgb(5, 42, 224);
+}
+
+
+/* students list section */
+.students-list-section {
+	margin: 5px;
+	padding: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap:10px;
+}
+
+.students-list-section .section__student {
+	background: rgba(12 12 12 / 0.9);
+	padding: 10px;
+	border-radius: 10px;
+	width: 100%;
+	height: 60px;
+	display: flex;
+	overflow: hidden;
+}
+
+.student__p {
+	display:flex;
+	width: 20%;
+	overflow: hidden;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;	
+}
+
+.student__p span {
+	width: 50%;
+}
+
+.student__crud {
+	display:flex;
+	align-items: center;
+	width: 20%;
+	overflow-x: hidden;
+	gap:10px;
+}
+
+.student-crud__button {
+	outline:none;
+	border:none;
+	background: transparent;
+	font-size:30px;
+}
+
+.student-crud__button i {
+	font-size:30px;
+	cursor: pointer;
+	transition:color .5s ease;
+}
+
+
+.student-crud__button-delete i {
+	color:#fe5533;
+}
+
+.student-crud__button-delete i:hover {
+	color:#510608;
+}
+
+.student-crud__button-edit i {
+	color:rgb(7, 35, 138);
+} 
+
+.student-crud__button-edit i:hover {
+	color:rgb(7, 35, 44);
+}
