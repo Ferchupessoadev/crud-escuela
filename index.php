@@ -36,7 +36,7 @@ $model = new Model("escuela", "localhost", "root", "");
 			<div class="section__student" id="<?= $student['id']?>"> 
 				<p class="student__p student__p-id">N°<?= $student['id'] ?></p>
 				<p class="student__p"><?= $student['name']?></p>
-				<p class="student__p"><?= $student['surname']?></span></p>
+				<p class="student__p"><?= $student['surname']?></p>
 				<p class="student__p"><?= $model->studentDateFormatting($student['fecha_nacimiento']) ?></p>
 				<div class="student__crud">
 					<button class="student-crud__button-delete student-crud__button"><i class="fa-solid fa-trash"></i></button>

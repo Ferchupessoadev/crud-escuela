@@ -45,8 +45,23 @@ class Model {
 			$sql = "INSERT INTO alumnos (name, surname, fecha_nacimiento) VALUES (?, ?, ?)";
 			$stmt = $this->conn->prepare($sql);
 			$stmt->execute([$name, $surname, $fechaNacimiento]);
+
+			$sql = "SELECT * FROM alumnos WHERE name = ? AND surname = ?)";
+			$stmt = $this->conn->prepare($sql);
+			$stmt->execute([$name, $surname]);
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+			$data = [
+				"status_code" => 200,
+				"id" => $result["id"],
+				"name" => $name,
+				"surname" => $surname,
+				"fecha_nacimiento" => $this->studentDateFormatting($fechaNacimiento),
+			];
+
+			return json_encode($data);
 		} catch (\PDOException) {
-			echo "ocurrio un error, lo siento vulve mas tarde";
+			return "ocurrio un error, lo siento vulve mas tarde";
 		}
 	}
 
