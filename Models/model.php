@@ -1,72 +1,92 @@
 <?php
-class Model {
-	public string $dbname;
-	public string $server;
-	public string $username;
-	public string $password;
-	public $conn;
+class Model
+{
+    public string $dbname;
+    public string $server;
+    public string $username;
+    public string $password;
+    public $conn;
 
-	function __construct($dbname, $server, $username, $password)
-	{
-		$this->dbname = $dbname;
-		$this->server = $server;
-		$this->username = $username;
-		$this->password = $password;
-		$this->connectDB();
-	}
-	
-	public function connectDB()
-	{
-		try {
-			$this->conn = new PDO("mysql:host={$this->server};dbname={$this->dbname}", $this->username, $this->password);
-		} catch (\PDOException $th) {
-			echo throw $th;
-			echo $th;
-		}
-	}	
+    function __construct($dbname, $server, $username, $password)
+    {
+        $this->dbname = $dbname;
+        $this->server = $server;
+        $this->username = $username;
+        $this->password = $password;
+        $this->connectDB();
+    }
 
-	public function getAllStudent()
-	{
-		try {
-			$allStudents = [];
-			$sql = "SELECT * FROM alumnos";
-			$stmt = $this->conn->prepare($sql);
-			$stmt->execute();	
-			$allStudents = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (\Throwable) {
-			echo "ocurrio un error. Lo sentimos.";
-		}
-		return $allStudents;
-	}
+    public function connectDB()
+    {
+        try {
+            $this->conn = new PDO("mysql:host={$this->server};dbname={$this->dbname}", $this->username, $this->password);
+        } catch (\PDOException $th) {
+            echo throw $th;
+            echo $th;
+        }
+    }
 
-	public function addStudent($name, $surname, $fechaNacimiento)
-	{
-		try {
-			$sql = "INSERT INTO alumnos (name, surname, fecha_nacimiento) VALUES (?, ?, ?)";
-			$stmt = $this->conn->prepare($sql);
-			$stmt->execute([$name, $surname, $fechaNacimiento]);
+    public function getAllStudent()
+    {
+        try {
+            $allStudents = [];
+            $sql = "SELECT * FROM alumnos";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $allStudents = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\Throwable) {
+            echo "ocurrio un error. Lo sentimos.";
+        }
+        return $allStudents;
+    }
 
-			$sql = "SELECT * FROM alumnos WHERE name = ? AND surname = ?)";
-			$stmt = $this->conn->prepare($sql);
-			$stmt->execute([$name, $surname]);
-			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    public function addStudent($name, $surname, $fechaNacimiento)
+    {
+        try {
+            $sql = "INSERT INTO alumnos (name, surname, fecha_nacimiento) VALUES (?, ?, ?)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$name, $surname, $fechaNacimiento]);
 
-			$data = [
-				"status_code" => 200,
-				"id" => $result["id"],
-				"name" => $name,
-				"surname" => $surname,
-				"fecha_nacimiento" => $this->studentDateFormatting($fechaNacimiento),
-			];
+            $id = intval($this->conn->lastInsertId());
 
-			return json_encode($data);
-		} catch (\PDOException) {
-			return "ocurrio un error, lo siento vulve mas tarde";
-		}
-	}
+            $data = [
+                "id" => $id,
+                "name" => $name,
+                "surname" => $surname,
+                "fecha_nacimiento" => $fechaNacimiento,
+            ];
 
-	public function studentDateFormatting($studentDate)
-	{
-		return implode("/",array_reverse(explode("-",$studentDate)));
-	}
+            return $data;
+        } catch (\PDOException $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function studentDateFormatting($studentDate)
+    {
+        return implode("/", array_reverse(explode("-", $studentDate)));
+    }
+
+
+    public function studentDelete($id)
+    {
+        try {
+            $sql = "DELETE FROM alumnos WHERE id = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$id]);
+
+            $data = [
+                "status_code" => 200,
+                "msj" => "Alumno eliminado correctamente",
+            ];
+
+            return $data;
+        } catch (\PDOException) {
+            $data = [
+                "status_code" => 500,
+                "msj" => "Ocurrio un error en el servidor, vuelve mas tarde.",
+            ];
+            return $data;
+        }
+    }
 }

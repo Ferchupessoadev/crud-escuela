@@ -1,49 +1,34 @@
+import studentHTML from './components_html/student.js'
+
 export default class Alumno {
-	constructor(id, name, surname, fechaNacimiento) 
-	{
-		this.id = id
-		this.name = name
-		this.surname = surname
-		this.fechaNacimiento = fechaNacimiento
-	}
+    constructor(name, surname, fechaNacimiento) {
+        this.name = name;
+        this.surname = surname;
+        this.fechaNacimiento = fechaNacimiento;
+    }
 
-	createStudent() 
-	{
-		const containerStudents = document.querySelector(".students-list-section")
-		const divAlumno = document.createElement("DIV")
-		divAlumno.classList.add("section__student")
-		divAlumno.setAttribute("id", this.id)
-		
-		const studentPId = document.createElement("P")
-		studentPId.classList.add("student__p")
-		studentPId.classList.add("student__p-id")
-		studentPId.textContent = `N°${this.id}`
+    createStudent(id) {
+        const [deleteBtn] = studentHTML(id, this.name, this.surname, this.fechaNacimiento)
+        // add listener to the delete and edit bottons.
+        deleteBtn.addEventListener("click", () => this.studentDelete(id))
+    }
 
-		const studentPName = document.createElement("P")
-        studentPName.classList.add("student__p")
-        studentPId.textContent = this.name
-		
-		const studentPSurname = document.createElement("P")
-        studentPSurname.classList.add("student__p")
-        studentPSurname.textContent = this.surname 
+    async studentDelete(id) {
+        try {
+            const formdata = new FormData();
+            formdata.append('id', id);
+            await fetch(
+                'http://localhost/Crud-escuela/api/student_delete.php',
+                {
+                    method: 'POST',
+                    body: formdata,
+                },
+            );
+            document.getElementById(id).remove(id)
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-		const studentPFecha = document.createElement("P")
-        studentPFecha.classList.add("student__p")
-        studentPFecha.textContent = this.fechaNacimiento 
-
-		divAlumno.appendChild(studentPId)
-		divAlumno.appendChild(studentPName)
-		divAlumno.appendChild(studentPSurname)
-		divAlumno.appendChild(studentPFecha)
-		containerStudents.appendChild(divAlumno)
-	}
-
-	studentDelete(id) 
-	{
-	}
-
-
-	studentEdit(id) 
-	{
-	}
+    studentEdit(id) { console.log(id) }
 }

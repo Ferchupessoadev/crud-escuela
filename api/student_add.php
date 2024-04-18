@@ -6,6 +6,6 @@ if($_POST)
 	if ($_POST['name'] && $_POST['surname'] && $_POST["fecha_nacimiento"])
 	{
 		$data =	$model->addStudent($_POST['name'], $_POST['surname'], $_POST["fecha_nacimiento"]);
-		echo $data;
+		echo json_encode($data);
 	}
 }
